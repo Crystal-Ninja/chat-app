@@ -1,8 +1,8 @@
 import express from "express";
 import dotenv from"dotenv";
-import {connectDB} from "./lib/db.js"
-import cookieParser from "cookie-parser"
-
+import {connectDB} from "./lib/db.js";
+import cookieParser from "cookie-parser";
+import cors from "cors";
 import authRoutes from "./route/auth.routes.js";
 import messageRoutes from "./route/message.routes.js";
 
@@ -13,7 +13,10 @@ app.use(express.json())
 app.use(cookieParser())
 app.use("/api/auth",authRoutes);
 app.use("/api/message",messageRoutes);
-
+app.use(cors({
+    origin:"http://localhost:5173/",
+    credentials:true,
+}))
 app.listen(PORT,()=>{
     console.log("server running on PORT:"+PORT);
     connectDB("mongodb+srv://crystalninja0123:gPMZYaF0FEAnGTlB@cluster0.n7fhbie.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
