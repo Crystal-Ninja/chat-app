@@ -93,6 +93,7 @@ export const logout=(req,res)=>{
     try {
         const {profilePic} =req.body;
         const userId=req.user._id;
+console.log(req.user);
 
         if(!profilePic){
             return res.status(400).json({message:"profile pic is required"})
@@ -101,7 +102,7 @@ export const logout=(req,res)=>{
         const updatedUser=await User.findByIdAndUpdate(userId,{profilePic:uploadResponse.secure_url},{new:true})
         res.status(200).json(UpdatedUser);
     } catch (error) {
-        console.log("error in update profile");
+        console.log("error in update profile", error);
         res.status(500).json({message:"internal server error"})
         
     }
