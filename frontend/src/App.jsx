@@ -7,14 +7,21 @@ import SettingsPage from './pages/SettingsPage'
 import ProfilePage from './pages/ProfilePage'
 import { Routes,Route, Navigate } from 'react-router-dom'
 import {UseAuthStore } from './store/UseAuthStore'
+import { useThemeStore } from './store/useThemeStore'
 import { useEffect } from 'react'
 import {Loader} from "lucide-react"
 import {Toaster} from "react-hot-toast"
 const App = () => {
     const {authUser,checkAuth,isCheckingAuth}=UseAuthStore();
+    const { theme } = useThemeStore()
   useEffect(() => {
     checkAuth()
   }, [checkAuth]);
+  useEffect(() => {
+    if (theme) {
+      document.documentElement.setAttribute("data-theme", theme)
+    }
+  }, [theme])
   console.log(authUser);
   if (isCheckingAuth && !authUser) return (
     <div className="flex items-center justify-center h-screen">
@@ -23,7 +30,9 @@ const App = () => {
     
   )
   return (
-    <div>
+    
+    <div theme-state={theme}>
+      
       <Navbar/>
       <Routes>
         <Route path="/" element={authUser ? <HomePage /> : <Navigate to="/login" />} />
