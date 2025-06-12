@@ -5,10 +5,11 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import authRoutes from "./route/auth.routes.js";
 import messageRoutes from "./route/message.routes.js";
+import { app,server } from "./lib/socket.js";
 
 dotenv.config();
 const PORT=5001;
-const app=express();
+
 app.use(cors({
     origin:"http://localhost:5173",
     credentials:true,
@@ -18,7 +19,7 @@ app.use(cookieParser())
 app.use("/api/auth",authRoutes);
 app.use("/api/messages",messageRoutes);
 
-app.listen(PORT,()=>{
+server.listen(PORT,()=>{
     console.log("server running on PORT:"+PORT);
     connectDB("mongodb+srv://crystalninja0123:gPMZYaF0FEAnGTlB@cluster0.n7fhbie.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0").then(()=>{
         console.log("connection succesfull")

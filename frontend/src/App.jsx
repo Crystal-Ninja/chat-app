@@ -12,8 +12,10 @@ import { useEffect } from 'react'
 import {Loader} from "lucide-react"
 import {Toaster} from "react-hot-toast"
 const App = () => {
-    const {authUser,checkAuth,isCheckingAuth}=UseAuthStore();
+    const {authUser,checkAuth,isCheckingAuth,onlineUsers}=UseAuthStore();
     const { theme } = useThemeStore()
+    console.log(onlineUsers);
+    
   useEffect(() => {
     checkAuth()
   }, [checkAuth]);
