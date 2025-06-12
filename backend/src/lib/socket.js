@@ -21,17 +21,30 @@ const userSocketMap = {}; // {userId: socketId}
 io.on("connection", (socket) => {
   console.log("A user connected", socket.id);
 
-  const userId = socket.handshake.query.userId;
-  if (userId) userSocketMap[userId] = socket.id;
+  const userId = socket.handshake.query?.userId;
 
-  // io.emit() is used to send events to all the connected clients
+  if (typeof userId === "string" && userId.trim()) {
+    userSocketMap[userId] = socket.id;
+  } else {
+    console.warn("Invalid or missing userId in socket handshake query");
+  }
+
   io.emit("getOnlineUsers", Object.keys(userSocketMap));
 
   socket.on("disconnect", () => {
     console.log("A user disconnected", socket.id);
-    delete userSocketMap[userId];
+
+    // Find and delete the user from userSocketMap
+    for (const [id, sid] of Object.entries(userSocketMap)) {
+      if (sid === socket.id) {
+        delete userSocketMap[id];
+        break;
+      }
+    }
+
     io.emit("getOnlineUsers", Object.keys(userSocketMap));
   });
 });
+
 
 export { io, app, server };
